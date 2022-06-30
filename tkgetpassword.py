@@ -164,7 +164,7 @@ class WinPassword(Toplevel):
                 -showchar: default is "*",
                 -minlenght: default is 0 (no limits),
                 -maxlenght: default is 0 (no limits)
-                -asserthash: default is b"" (example:
+                -asserthash: default is "" (example:
                         a representation hash public hashlib.new("sha256", bKey).hexdigest()      
                 -namesha: default is "sha256",
                     used as hashlib.new(namesha, bKey).hexdisgest() method
@@ -205,7 +205,6 @@ class WinPassword(Toplevel):
             Label(self, bitmap="warning", compound="left",
                   text=kw["message"], font=self.font,
                   ).pack(side="top", fill="x", expand=True, padx=13);
-
 
 
         frameAcpt = Frame(self);
@@ -405,7 +404,6 @@ def askchangepassword(parent, asserthash, **kw):
     
     if type(resp) != tuple:
         return ("", "");
-
 
     return resp; #tuple(old,new) 
 
