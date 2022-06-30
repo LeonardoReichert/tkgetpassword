@@ -1,7 +1,7 @@
 # tkgetpassword
 tkgetpassword.py A module to prompt the user for password input with a GUI Tkinter dialogs.
 
-# 3 functions forms window password:
+# 3 forms functions:
 
 askcreatepassword, askoldpassword, askchangepassword
 
@@ -14,4 +14,5 @@ askcreatepassword, askoldpassword, askchangepassword
 3- askchangepassword(...)
     Use on change old password, return (str: old password, str: new passwod)
 
-#use help(tkgetpassword)
+# help(tkgetpassword)
+Use help(module) to see how to use.
