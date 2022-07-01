@@ -9,13 +9,13 @@ A module to prompt the user for password input with a GUI Tkinter dialogs.
 
 askcreatepassword, askoldpassword, askchangepassword
 
-1- askcreatepassword(...)
+1- **askcreatepassword**(...)
     Use on create a new password, return (str: a new password)
 
-2- askoldpassword(...)
+2- **askoldpassword**(...)
     Use on get old password and check with functions Sha's (HASH), return (str: old password)
 
-3- askchangepassword(...)
+3- **askchangepassword**(...)
     Use on change old password, return (str: old password, str: new passwod)
 
 # help(tkgetpassword)
