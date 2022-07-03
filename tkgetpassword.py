@@ -33,7 +33,7 @@ Options **kw use on the functions askcreatepassword,
     -showchar: default "*"
     -minlenght: default 0 (no limits)
     -maxlenght: default 0 (no limits)
-    -asserthash: default b"" (example:
+    -asserthash: string hash to authenticate (example:
                 a representation hash: hashlib.new("sha256", bKey).hexdigest()
                 ignored by askcreatepassword(...) function
     -namesha: default used as "sha256",
@@ -164,7 +164,7 @@ class WinPassword(Toplevel):
                 -showchar: default is "*",
                 -minlenght: default is 0 (no limits),
                 -maxlenght: default is 0 (no limits)
-                -asserthash: default is "" (example:
+                -asserthash: string hash to authenticate (example:
                         a representation hash public hashlib.new("sha256", bKey).hexdigest()      
                 -namesha: default is "sha256",
                     used as hashlib.new(namesha, bKey).hexdisgest() method
