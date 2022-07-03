@@ -15,13 +15,13 @@ tkgetpassword.py
 
 askcreatepassword, askoldpassword, askchangepassword
 
-1- askcreatepassword(...)
+1- askcreatepassword(parent, **kw)
     Use on create a new password, return (str: a new password)
 
-2- askoldpassword(...)
+2- askoldpassword(parent, asserthash, **kw)
     Use on get old password and check with functions Sha's (HASH), return (str: old password)
 
-3- askchangepassword(...)
+3- askchangepassword(parent, asserthash, **kw)
     Use on change old password, return (str: old password, str: new passwod)
 
 Options **kw use on the functions askcreatepassword,
@@ -79,10 +79,18 @@ __all__ = [
 
 
 
+try:
+    from tkinter import Toplevel,Frame,Label, BitmapImage;
+    from tkinter.font import Font;
+    from tkinter.ttk import Entry, Button;
+except ImportError:
+    from Tkinter import Toplevel,Frame,Label, BitmapImage;
+    from tkFont import Font;
+    from ttk import Entry, Button;
 
-from tkinter import Toplevel,Frame,Label, BitmapImage;
-from tkinter.font import Font;
-from tkinter.ttk import Entry, Button;
+
+
+
 
 from hashlib import new as newSha; #usually used sha256
 from hashlib import algorithms_available;
@@ -205,6 +213,7 @@ class WinPassword(Toplevel):
             Label(self, bitmap="warning", compound="left",
                   text=kw["message"], font=self.font,
                   ).pack(side="top", fill="x", expand=True, padx=13);
+
 
 
         frameAcpt = Frame(self);
@@ -404,6 +413,7 @@ def askchangepassword(parent, asserthash, **kw):
     
     if type(resp) != tuple:
         return ("", "");
+
 
     return resp; #tuple(old,new) 
 
