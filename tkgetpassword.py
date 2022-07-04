@@ -26,20 +26,32 @@ askcreatepassword, askoldpassword, askchangepassword
 
 Options **kw use on the functions askcreatepassword,
         askoldpassword or askchangepassword:
-    -title: str
-    -message: str
-    -font1: (font of label passwords)
-    -font2: (font of passwords)
-    -showchar: default "*"
+    -title: optional title str
+    -message: optional message str
+    
+    -font1: optional (font of label passwords)
+    -font2: optional (font of passwords)
+    
+    -showchar: default is "*"
+    
     -minlenght: default 0 (no limits)
     -maxlenght: default 0 (no limits)
-    -asserthash: string hash to authenticate (example:
-                a representation hash: hashlib.new("sha256", bKey).hexdigest()
-                ignored by askcreatepassword(...) function
-    -namesha: default used as "sha256",
-               used on hashlib.new(namesha, passw).hexdisgest() method
+    
+    -asserthash: a string hash to authenticate (example:
+            a representation hash: hashlib.new("sha256", bytesPassword).hexdigest()
+            ignored by askcreatepassword(...) function
+    -namesha: default used is "sha256",
+            used on hashlib.new(namesha, passw).hexdisgest() method
+            
     -textbutton: default is a tuple ("Ok", "Cancel")
     -stylebutton: default is "TButton"
+
+
+
+ *** Changes, updates ***
+
+ release 1.2.1: added variable "version"
+ 
 """
 
 
@@ -71,11 +83,14 @@ Options **kw use on the functions askcreatepassword,
 
 
 __all__ = [
-    'askcreatepassword',
-    'askoldpassword',
-    'askchangepassword',
-    'WinPassword',
+    "askcreatepassword",
+    "askoldpassword",
+    "askchangepassword",
+    "WinPassword",
+    "version",
     ]
+
+version = "1.2.1"
 
 
 
@@ -87,9 +102,6 @@ except ImportError:
     from Tkinter import Toplevel,Frame,Label, BitmapImage;
     from tkFont import Font;
     from ttk import Entry, Button;
-
-
-
 
 
 from hashlib import new as newSha; #usually used sha256
@@ -126,9 +138,8 @@ static char image_bits[] = {
 def _center_window(master, window):
     window.withdraw();
     window.update_idletasks(); #<- need the geometry...
+
     
-    #print(window.winfo_width());
-   
     xMaster, yMaster = master.winfo_rootx(),master.winfo_rooty();
     wMaster, hMaster = master.winfo_width(),master.winfo_height();
     
@@ -165,17 +176,22 @@ class WinPassword(Toplevel):
     def __init__(self, master_parent, **kw):
 
         """
-            kw: -title: (string, title of window),
+            kw: -title: optional string (title of window)
                 -message: (string, label top message with a classic icon warning),
-                -font1: (font of labels),
-                -font2: (font of passwords),
-                -showchar: default is "*",
-                -minlenght: default is 0 (no limits),
+                
+                -font1: optional (font of labels)
+                -font2: optional (font of passwords)
+                
+                -showchar: default is "*"
+                
+                -minlenght: default is 0 (no limits)
                 -maxlenght: default is 0 (no limits)
-                -asserthash: string hash to authenticate (example:
-                        a representation hash public hashlib.new("sha256", bKey).hexdigest()      
+                
+                -asserthash: a string hash to authenticate (example:
+                    a representation hash public hashlib.new("sha256", bytesPassword).hexdigest()      
                 -namesha: default is "sha256",
                     used as hashlib.new(namesha, bKey).hexdisgest() method
+                    
                 -textbutton: default is a tuple ("Ok", "Cancel")
                 -stylebutton: default is "TButton"
         """
@@ -214,8 +230,6 @@ class WinPassword(Toplevel):
                   text=kw["message"], font=self.font,
                   ).pack(side="top", fill="x", expand=True, padx=13);
 
-
-
         frameAcpt = Frame(self);
         frameAcpt.pack(side="bottom", pady=5, padx=3);
         
@@ -243,8 +257,8 @@ class WinPassword(Toplevel):
         self.oldPassword = None;
         self.password = "";
 
-        self.bpEyeClose = BitmapImage(data=_BP_EYECLOSE, foreground="white", background="black");
-        self.bpEyeOpen = BitmapImage(data=_BP_EYEOPEN, foreground="white", background="black");
+        self.bpEyeClose = BitmapImage(data=_BP_EYECLOSE,foreground="gray90",background="black");
+        self.bpEyeOpen = BitmapImage(data=_BP_EYEOPEN,foreground="gray90",background="black");
 
 
     def _MsgInvalidate(self):
@@ -306,7 +320,7 @@ class WinPassword(Toplevel):
         entry.bind("<Return>", lambda e: self._accept() );
         entry.bind("<KeyPress>", lambda e: self.labelError.configure(text="") );
         entry.bind("<<Copy>>", lambda e: self._ignoreCopy(entry));
-
+        
         instantBtnShow = Label(frame0, image=self.bpEyeClose);
         instantBtnShow.pack(side="right", before=entry);
         instantBtnShow.bind("<ButtonPress-1>", lambda e: self._openEye(entry, instantBtnShow));
@@ -399,7 +413,7 @@ def askoldpassword(parent, asserthash, **kw):
 
 def askchangepassword(parent, asserthash, **kw):
     """form: change old password, return (str: old password, str: new passwod)"""
-
+    
     kw["asserthash"]=asserthash;
     kw.setdefault("title", "Change password");
     
@@ -413,8 +427,7 @@ def askchangepassword(parent, asserthash, **kw):
     
     if type(resp) != tuple:
         return ("", "");
-
-
+    
     return resp; #tuple(old,new) 
 
 
@@ -423,7 +436,7 @@ if __name__ == "__main__":
     from tkinter import Radiobutton;
 
     root = Tk();
-    #root.geometry("220x150");
+    root.geometry("220x150");
     root.title("test");
 
     font = Font(family="Verdana", size=8);
@@ -435,7 +448,7 @@ if __name__ == "__main__":
 
         print("test, using param -namesha: %s" % typeSha);
         
-        newPass = askcreatepassword(root, title="askcreatepassword(...)", showchar="*",
+        newPass = askcreatepassword(root, title="askcreatepassword(...)",
                                    minlenght=12, font1=font, font2=fontPassword);
         if not newPass:
             print("No-Password, canceled.");
@@ -444,9 +457,7 @@ if __name__ == "__main__":
         hashed = newSha(typeSha, newPass.encode()).hexdigest();
         
         print("form create password: %s %s" % (newPass, hashed) );
-
-    
-
+        
         print("form old password:", askoldpassword(root, hashed,
                                             namesha=typeSha,
                                             title="askoldpassword(...)",
@@ -457,7 +468,6 @@ if __name__ == "__main__":
                                            namesha=typeSha,
                                            title="askchangepassword(...)",
                                            font1=font, font2=fontPassword );
-        
         
         if not (oldP or newP):
             print("form change password is canceled");
