@@ -90,7 +90,7 @@ __all__ = [
     "version",
     ]
 
-version = "1.2.1"
+version = "1.2.2"
 
 
 
@@ -131,6 +131,7 @@ static char image_bits[] = {
 0x87,0xc3,0x1f,0xc7,0xff,0x1f,0xff,0xff,0x1f,0xff,0xff,0x1f,0xff,0xff,0x1f,
 0xff,0xff,0x1f
 };"""
+
 
 
 def _center_window(master, window):
@@ -335,7 +336,6 @@ class WinPassword(Toplevel):
         entry.configure(show="")
         label.configure(image=self.bpEyeOpen);
         
-
     def waitResp(self, exitcurgrab = True):
         """ intern function, once the form is ready,
         it show and retrieves and constrains the main focus and
@@ -405,6 +405,7 @@ def askoldpassword(parent, asserthash, **kw):
     return resp;
 
 
+
 def askchangepassword(parent, asserthash, **kw):
     """form: change old password, return (str: old password, str: new passwod)"""
     
@@ -468,7 +469,7 @@ if __name__ == "__main__":
             return;
         
         print("form change password: %s to %s" % (oldP, newP));
-
+    
     root.setvar("mysha", default_sha);
 
     Radiobutton(root, text="param namesha = '%s'" %default_sha,variable="mysha",value=default_sha,
@@ -480,4 +481,7 @@ if __name__ == "__main__":
 
     root.mainloop();
     
+
+
+
 
