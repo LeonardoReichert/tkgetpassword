@@ -133,8 +133,6 @@ static char image_bits[] = {
 };"""
 
 
-
-
 def _center_window(master, window):
     window.withdraw();
     window.update_idletasks(); #<- need the geometry...
@@ -164,9 +162,6 @@ def _center_window(master, window):
     
     window.geometry("+%d+%d" % (x, y));
     window.deiconify();
-
-
-
 
 
 class WinPassword(Toplevel):
@@ -410,7 +405,6 @@ def askoldpassword(parent, asserthash, **kw):
     return resp;
 
 
-
 def askchangepassword(parent, asserthash, **kw):
     """form: change old password, return (str: old password, str: new passwod)"""
     
@@ -475,7 +469,6 @@ if __name__ == "__main__":
         
         print("form change password: %s to %s" % (oldP, newP));
 
-
     root.setvar("mysha", default_sha);
 
     Radiobutton(root, text="param namesha = '%s'" %default_sha,variable="mysha",value=default_sha,
@@ -487,7 +480,4 @@ if __name__ == "__main__":
 
     root.mainloop();
     
-
-
-
 
