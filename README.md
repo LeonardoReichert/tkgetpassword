@@ -1,6 +1,8 @@
 # tkgetpassword
 A module to prompt the user for password input with a GUI Tkinter dialogs.
 
+![askcreatepassword](https://github.com/LeonardoReichert/tkgetpassword/blob/main/examples/createpass.png?raw=true)
+
 # * How to Install *
     pip install tkgetpassword
 
@@ -17,6 +19,8 @@ askcreatepassword, askoldpassword, askchangepassword
 
 3- **askchangepassword**( )
     Use on change old password, return (str: old password, str: new passwod)
+
+![askoldpassword](https://github.com/LeonardoReichert/tkgetpassword/blob/main/examples/oldpass.png?raw=true)
 
 # help(tkgetpassword)
 Use help(module) to see how to use.
