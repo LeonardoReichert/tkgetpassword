@@ -36,6 +36,8 @@ Options **kw use on the functions askcreatepassword,
     
     -minlenght: default 0 (no limits)
     -maxlenght: default 0 (no limits)
+    -onlyascii: True or False, defalt is True, validate ascii chars (0 .. 127 range)
+                (from version 1.2.3)
     
     -asserthash: a string hash to authenticate (example:
             a representation hash: hashlib.new("sha256", bytesPassword).hexdigest()
@@ -51,6 +53,7 @@ Options **kw use on the functions askcreatepassword,
  *** Changes, updates ***
 
  release 1.2.1: added variable "version"
+ release 1.2.3: added optional param filter "onlyascii"
  
 """
 
@@ -90,7 +93,7 @@ __all__ = [
     "version",
     ]
 
-version = "1.2.2"
+version = "1.2.3"
 
 
 
@@ -165,6 +168,15 @@ def _center_window(master, window):
     window.deiconify();
 
 
+def _isAscii(string):
+    for c in string:
+        if ord(c) > 127:
+            return False
+    return True
+
+
+
+
 class WinPassword(Toplevel):
 
     """ A class Constructor intern for create password form """
@@ -182,6 +194,7 @@ class WinPassword(Toplevel):
                 
                 -minlenght: default is 0 (no limits)
                 -maxlenght: default is 0 (no limits)
+                -onlyascii: True or False, defalt is True, validate ascii chars (0 .. 127 range)
                 
                 -asserthash: a string hash to authenticate (example:
                     a representation hash public hashlib.new("sha256", bytesPassword).hexdigest()      
@@ -210,6 +223,7 @@ class WinPassword(Toplevel):
         
         self.minlenght = kw.pop("minlenght", 0);
         self.maxlenght = kw.pop("maxlenght", 0);
+        self.onlyascii = kw.pop("onlyascii", True);
         
         assert self.minlenght >= 0 and self.maxlenght >= 0;
         
@@ -266,7 +280,9 @@ class WinPassword(Toplevel):
         #--- search user error ---
         if entryRee and password != entryRee.get():
             return "Error: The re-enter passwords is diferent";
-        
+        elif self.onlyascii and not _isAscii(password):
+            return "Error: Invalid characters, only ASCII is accepted"
+
         #--- compare assert password ---
         if entryOld:
             if self.asserthash and \
@@ -287,6 +303,7 @@ class WinPassword(Toplevel):
                                                                         len(password));
         
         return "";
+
         
     def _accept(self):
         err = self._MsgInvalidate();
@@ -299,6 +316,7 @@ class WinPassword(Toplevel):
 
         self.labelError.configure(text=err);
         return;
+
 
     def createEntry(self, tagKey, prompt):
         """ constructor, this create a entry and save on self.entrys
@@ -322,19 +340,23 @@ class WinPassword(Toplevel):
         instantBtnShow.bind("<ButtonPress-1>", lambda e: self._openEye(entry, instantBtnShow));
         instantBtnShow.bind("<ButtonRelease-1>", lambda e: self._closeEye(entry, instantBtnShow));
 
+
     def _ignoreCopy(self, entry):
         if entry["show"] == self.showchar: #is hidden, cannot copy
             self.clipboard_clear();
             entry.selection_clear();
             self.bell();
 
+
     def _closeEye(self, entry, label):
         entry.configure(show=self.showchar);
         label.configure(image=self.bpEyeClose);
 
+
     def _openEye(self, entry, label):
         entry.configure(show="")
         label.configure(image=self.bpEyeOpen);
+
         
     def waitResp(self, exitcurgrab = True):
         """ intern function, once the form is ready,
@@ -362,10 +384,12 @@ class WinPassword(Toplevel):
         
         return self.password;
 
+
     def resetClean(self):
         """ clear all entrys """
         for k in self.entrys:
             self.entrys[k].delete(0, "end");
+
 
     def __str__(self):
         """
@@ -373,6 +397,8 @@ class WinPassword(Toplevel):
         """
         return "form_password";
     
+
+
 
 def askcreatepassword(parent, **kw):
     """ form: create a new password, return (str: new password)"""
@@ -391,10 +417,12 @@ def askcreatepassword(parent, **kw):
 
 
 def askoldpassword(parent, asserthash, **kw):
-    """ form: get old password and check with func HASH, return (str: old password)"""
+    """ form: get old password and check with func HASH, return (str: old password)
+     param onlyascii is False by default """
 
     kw["asserthash"]=asserthash;
     kw.setdefault("title", "Enter password");
+    kw.setdefault("onlyascii", False);
     
     context = WinPassword(parent, **kw);
     
@@ -403,7 +431,6 @@ def askoldpassword(parent, asserthash, **kw):
     resp = context.waitResp();
 
     return resp;
-
 
 
 def askchangepassword(parent, asserthash, **kw):
@@ -426,9 +453,17 @@ def askchangepassword(parent, asserthash, **kw):
     return resp; #tuple(old,new) 
 
 
+
+
 if __name__ == "__main__":
-    from tkinter import Tk;
-    from tkinter import Radiobutton;
+
+    # **  Test  ** 
+
+    try:
+        from tkinter import Tk, Radiobutton;
+    except:
+        from Tkinter import Tk, Radiobutton;
+        
 
     root = Tk();
     root.geometry("220x150");
